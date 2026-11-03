@@ -1,0 +1,1 @@
+Refatorei as funções principais aplicando as convenções de nomenclatura padrão (snake_case) e extraí lógicas complexas em pequenos métodos auxiliares. Também documentei os parâmetros de entrada e retorno com docstrings detalhadas, melhorando significativamente a legibilidade e a manutenção do código.
