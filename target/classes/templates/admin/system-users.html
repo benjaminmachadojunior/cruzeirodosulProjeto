@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/layout :: head('Operadores')}"></head>
+<body>
+<div class="container-fluid"><div class="row">
+    <div th:replace="~{admin/layout :: sidebar('system-users')}"></div>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+        <h1>Operadores do Sistema</h1>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <form th:action="@{/admin/system-users/add}" th:object="${newUsuario}" method="post" class="card p-3 my-3">
+            <div class="mb-3"><label>Login / Username</label><input type="text" th:field="*{username}" class="form-control" required/></div>
+            <div class="mb-3"><label>Senha</label><input type="password" th:field="*{password}" class="form-control" required/></div>
+            <button type="submit" class="btn btn-success">Criar Acesso</button>
+        </form>
+        <table class="table table-striped">
+            <thead><tr><th>Username</th><th>Ações</th></tr></thead>
+            <tbody>
+                <tr th:each="su : ${systemUsersList}">
+                    <td th:text="${su.username}"></td>
+                    <td><a th:href="@{/admin/system-users/delete/{id}(id=${su.id})}" class="btn btn-danger btn-sm">Remover</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div></div>
+</body>
+</html>

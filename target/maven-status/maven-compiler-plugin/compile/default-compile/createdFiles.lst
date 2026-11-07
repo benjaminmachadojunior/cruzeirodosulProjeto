@@ -1,0 +1,10 @@
+com\associacao\moradores\controller\AdminDashboardController.class
+com\associacao\moradores\MoradoresApplication.class
+com\associacao\moradores\model\Usuario.class
+com\associacao\moradores\model\Morador.class
+com\associacao\moradores\model\Solicitacao.class
+com\associacao\moradores\controller\LoginController.class
+com\associacao\moradores\repository\MoradorRepository.class
+com\associacao\moradores\repository\UsuarioRepository.class
+com\associacao\moradores\repository\SolicitacaoRepository.class
+com\associacao\moradores\config\SecurityConfig.class

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/layout :: head('Moradores')}"></head>
+<body>
+<div class="container-fluid"><div class="row">
+    <div th:replace="~{admin/layout :: sidebar('users')}"></div>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+        <h1>Gerenciamento de Moradores</h1>
+        <form th:action="@{/admin/users/add}" th:object="${newMorador}" method="post" class="card p-3 my-3">
+            <div class="mb-3"><label>Nome do Morador</label><input type="text" th:field="*{nome}" class="form-control" required/></div>
+            <div class="mb-3"><label>Status</label><select th:field="*{status}" class="form-control"><option value="Ativo">Ativo</option><option value="Inativo">Inativo</option></select></div>
+            <button type="submit" class="btn btn-primary">Adicionar Morador</button>
+        </form>
+        <table class="table table-striped">
+            <thead><tr><th>Nome</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody>
+                <tr th:each="m : ${usersList}">
+                    <td th:text="${m.nome}"></td>
+                    <td th:text="${m.status}"></td>
+                    <td><a th:href="@{/admin/users/delete/{id}(id=${m.id})}" class="btn btn-danger btn-sm">Remover</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div></div>
+</body>
+</html>

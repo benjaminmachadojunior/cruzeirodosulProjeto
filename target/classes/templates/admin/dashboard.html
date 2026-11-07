@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/layout :: head('Dashboard')}"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Barra lateral padrão do sistema -->
+        <div th:replace="~{admin/layout :: sidebar('dashboard')}"></div>
+
+        <!-- Conteúdo Principal -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <h1 class="h2 mb-4">Dashboard Administrativo</h1>
+
+            <!-- Linha de Indicadores por Status -->
+            <div class="row g-4">
+
+                <!-- Card de Pendentes (Vermelho) -->
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card border-0 shadow-sm" style="background-color: #f8d7da; color: #842029;">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Pendentes</h6>
+                                    <h2 class="display-5 fw-bold mb-0" th:text="${totalPendente}">0</h2>
+                                </div>
+                                <div class="bg-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 55px; height: 55px; opacity: 0.85;">
+                                    <span style="font-size: 1.5rem;">●</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card de Em Análise (Amarelo) -->
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card border-0 shadow-sm" style="background-color: #fff3cd; color: #664d03;">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Em Análise</h6>
+                                    <h2 class="display-5 fw-bold mb-0" th:text="${totalEmAnalise}">0</h2>
+                                </div>
+                                <div class="bg-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 55px; height: 55px; opacity: 0.85;">
+                                    <span style="font-size: 1.3rem;">▲</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card de Resolvidos (Verde) -->
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card border-0 shadow-sm" style="background-color: #d1e7dd; color: #0f5132;">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Resolvidos</h6>
+                                    <h2 class="display-5 fw-bold mb-0" th:text="${totalResolvido}">0</h2>
+                                </div>
+                                <div class="bg-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 55px; height: 55px; opacity: 0.85;">
+                                    <span style="font-size: 1.3rem;">✓</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>
