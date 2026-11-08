@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.associacao.moradores.controller.AdminDashboardControllerTest
--------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.984 s -- in com.associacao.moradores.controller.AdminDashboardControllerTest
