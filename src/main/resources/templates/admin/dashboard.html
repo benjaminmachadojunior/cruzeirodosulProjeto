@@ -1,73 +1,134 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/layout :: head('Dashboard')}"></head>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- O fragmento do head deve idealmente carregar o bloco de estilo abaixo -->
+    <div th:replace="~{admin/layout :: head('Dashboard')}"></div>
+
+    <style>
+        /* Estilos para o modo de Alto Contraste */
+        body.alto-contraste {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+        }
+        body.alto-contraste main,
+        body.alto-contraste .card,
+        body.alto-contraste .bg-white {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            border: 2px solid #ffffff !important;
+        }
+        body.alto-contraste h1,
+        body.alto-contraste h2,
+        body.alto-contraste h6,
+        body.alto-contraste span,
+        body.alto-contraste button {
+            color: #ffffff !important;
+        }
+        body.alto-contraste .btn-contrast {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+    </style>
+</head>
 <body>
+<!-- Link de salto para o conteúdo principal (essencial para navegação por teclado) -->
+<a href="#conteudo-principal" class="visually-hidden-focusable btn btn-primary m-2">Ir para o conteúdo principal</a>
+
 <div class="container-fluid">
     <div class="row">
         <!-- Barra lateral padrão do sistema -->
         <div th:replace="~{admin/layout :: sidebar('dashboard')}"></div>
 
         <!-- Conteúdo Principal -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-            <h1 class="h2 mb-4">Dashboard Administrativo</h1>
+        <main id="conteudo-principal" class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h2 mb-0">Dashboard Administrativo</h1>
+                <!-- Botão de Alto Contraste -->
+                <button id="toggle-contrast" class="btn btn-outline-secondary btn-contrast" aria-pressed="false">
+                    Alternar Alto Contraste
+                </button>
+            </div>
 
             <!-- Linha de Indicadores por Status -->
             <div class="row g-4">
 
                 <!-- Card de Pendentes (Vermelho) -->
                 <div class="col-12 col-sm-6 col-xl-4">
-                    <div class="card border-0 shadow-sm" style="background-color: #f8d7da; color: #842029;">
+                    <section class="card border-0 shadow-sm" style="background-color: #f8d7da; color: #842029;" aria-labelledby="titulo-pendentes">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="text-uppercase fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Pendentes</h6>
-                                    <h2 class="display-5 fw-bold mb-0" th:text="${totalPendente}">0</h2>
+                                    <h2 class="text-uppercase fw-bold mb-1" id="titulo-pendentes" style="font-size: 0.85rem; letter-spacing: 0.5px;">Pendentes</h2>
+                                    <p class="display-5 fw-bold mb-0" th:text="${totalPendente}">0</p>
                                 </div>
                                 <div class="bg-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 55px; height: 55px; opacity: 0.85;">
-                                    <span style="font-size: 1.5rem;">●</span>
+                                    <!-- Ícone textual com fallback para leitor de tela -->
+                                    <span aria-hidden="true" style="font-size: 1.5rem;">●</span>
+                                    <span class="visually-hidden">(Atenção: Status Pendente)</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
 
                 <!-- Card de Em Análise (Amarelo) -->
                 <div class="col-12 col-sm-6 col-xl-4">
-                    <div class="card border-0 shadow-sm" style="background-color: #fff3cd; color: #664d03;">
+                    <section class="card border-0 shadow-sm" style="background-color: #fff3cd; color: #664d03;" aria-labelledby="titulo-analise">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="text-uppercase fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Em Análise</h6>
-                                    <h2 class="display-5 fw-bold mb-0" th:text="${totalEmAnalise}">0</h2>
+                                    <h2 class="text-uppercase fw-bold mb-1" id="titulo-analise" style="font-size: 0.85rem; letter-spacing: 0.5px;">Em Análise</h2>
+                                    <p class="display-5 fw-bold mb-0" th:text="${totalEmAnalise}">0</p>
                                 </div>
                                 <div class="bg-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 55px; height: 55px; opacity: 0.85;">
-                                    <span style="font-size: 1.3rem;">▲</span>
+                                    <span aria-hidden="true" style="font-size: 1.3rem;">▲</span>
+                                    <span class="visually-hidden">(Aviso: Status Em Análise)</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
 
                 <!-- Card de Resolvidos (Verde) -->
                 <div class="col-12 col-sm-6 col-xl-4">
-                    <div class="card border-0 shadow-sm" style="background-color: #d1e7dd; color: #0f5132;">
+                    <section class="card border-0 shadow-sm" style="background-color: #d1e7dd; color: #0f5132;" aria-labelledby="titulo-resolvidos">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="text-uppercase fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Resolvidos</h6>
-                                    <h2 class="display-5 fw-bold mb-0" th:text="${totalResolvido}">0</h2>
+                                    <h2 class="text-uppercase fw-bold mb-1" id="titulo-resolvidos" style="font-size: 0.85rem; letter-spacing: 0.5px;">Resolvidos</h2>
+                                    <p class="display-5 fw-bold mb-0" th:text="${totalResolvido}">0</p>
                                 </div>
                                 <div class="bg-white rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 55px; height: 55px; opacity: 0.85;">
-                                    <span style="font-size: 1.3rem;">✓</span>
+                                    <span aria-hidden="true" style="font-size: 1.3rem;">✓</span>
+                                    <span class="visually-hidden">(Confirmado: Status Resolvido)</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
 
             </div>
         </main>
     </div>
 </div>
+
+<!-- Script para ativar/desativar o Alto Contraste e salvar a preferência do usuário -->
+<script>
+    const toggleButton = document.getElementById('toggle-contrast');
+
+    // Verifica se o usuário já tinha ativado o alto contraste antes
+    if (localStorage.getItem('highContrast') === 'true') {
+        document.body.classList.add('alto-contrast'); // Fallback histórico
+        document.body.classList.add('alto-contrast' === 'alto-contraste' ? '' : 'alto-contraste');
+        toggleButton.setAttribute('aria-pressed', 'true');
+    }
+
+    toggleButton.addEventListener('click', () => {
+        const isAccessible = document.body.classList.toggle('alto-contraste');
+        toggleButton.setAttribute('aria-pressed', isAccessible);
+        localStorage.setItem('highContrast', isAccessible);
+    });
+</script>
 </body>
 </html>
