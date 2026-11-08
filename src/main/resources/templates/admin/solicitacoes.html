@@ -1,95 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/layout :: head('Solicitações')}"></head>
+<html xmlns:th="http://thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Solicitações</title>
+</head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <div th:replace="~{admin/layout :: sidebar('solicitacoes')}"></div>
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-            <h1>Solicitações</h1>
 
-            <!-- Formulário de Criação (Sem o campo de Status) -->
-            <form th:action="@{/admin/solicitacoes/add}" th:object="${newSolicitacao}" method="post" class="card p-3 my-3">
+<!-- Renderizado dentro do layout.html -->
+<div th:fragment="content">
+    <h2>Gerenciamento de Solicitações</h2>
 
-                <!-- Campo de Seleção para Morador -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold" style="color: #212529 !important;">Selecione o Morador</label>
-                    <div class="card bg-white border p-2" style="max-height: 180px; overflow-y: auto;">
-                        <div th:each="m : ${moradoresList}" class="form-check p-2 border-bottom border-light d-flex align-items-center">
-                            <input class="form-check-input ms-1 me-3" type="radio" name="morador.id" th:id="'morador_' + ${m.id}" th:value="${m.id}" required />
-                            <label class="form-check-label text-dark fw-normal" th:for="'morador_' + ${m.id}" th:text="${m.nome}" style="color: #212529 !important; cursor: pointer;">
-                                Nome do Morador
-                            </label>
-                        </div>
-                    </div>
-                </div>
+    <p>Abaixo estão listados os chamados abertos pelos moradores para manutenção e melhorias do bairro.</p>
 
-                <div class="mb-3">
-                    <label class="fw-bold">Endereço</label>
-                    <input type="text" th:field="*{endereco}" class="form-control" required/>
-                </div>
-
-                <div class="mb-3">
-                    <label class="fw-bold">Criticidade (0 a 99)</label>
-                    <input type="number" th:field="*{criticidade}" min="0" max="99" class="form-control" required/>
-                </div>
-
-                <div class="mb-3">
-                    <label class="fw-bold">Descrição</label>
-                    <textarea th:field="*{descricao}" maxlength="1000" class="form-control" rows="3" required></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-warning">Criar Solicitação</button>
-            </form>
-
-            <!-- Tabela de Listagem -->
-            <table class="table table-striped align-middle">
-                <thead>
-                <tr>
-                    <th>Criado por</th>
-                    <th>Morador</th>
-                    <th>Endereço</th>
-                    <th>Criticidade</th>
-                    <th>Status</th>
-                    <th>Data</th>
-                    <th>Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="s : ${solicitacoesList}">
-                    <td th:text="${s.operador != null ? s.operador.username : 'N/A'}"></td>
-                    <td th:text="${s.morador != null ? s.morador.nome : 'N/A'}"></td>
-                    <td th:text="${s.endereco}"></td>
-                    <td th:text="${s.criticidade}"></td>
-                    <td>
-                        <!-- Badge Vermelho para PENDENTE -->
-                        <span th:if="${s.status == 'PENDENTE'}" class="badge rounded-pill bg-danger text-white px-3 py-2 fw-bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
-                            ● PENDENTE
+    <!-- Tabela Semântica Acessível -->
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+        <caption>Lista detalhada de solicitações dos moradores do condomínio</caption>
+        <thead>
+        <tr>
+            <th scope="col">Código</th>
+            <th scope="col">Morador</th>
+            <th scope="col">Descrição do Pedido</th>
+            <th scope="col">Status Atual</th>
+            <th scope="col">Ações disponíveis</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop do Thymeleaf iterando sobre a lista vinda do Controller -->
+        <tr th:each="solicitacao : ${solicitacoes}">
+            <td th:text="${solicitacao.id}">1</td>
+            <td th:text="${solicitacao.morador.nome}">Benjamin Junior</td>
+            <td th:text="${solicitacao.descricao}">Manutenção na iluminação da via principal.</td>
+            <td>
+                <!-- Uso de badge contextualizado textualmente e não apenas por cor -->
+                <span th:text="${solicitacao.status}"
+                      th:classappend="${solicitacao.status == 'PENDENTE' ? 'status-alerta' : 'status-ok'}">
+                            PENDENTE
                         </span>
-
-                        <!-- Badge Amarelo para EM ANÁLISE -->
-                        <span th:if="${s.status == 'EM_ANÁLISE' or s.status == 'EM ANÁLISE'}" class="badge rounded-pill bg-warning text-dark px-3 py-2 fw-bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
-                            ▲ EM ANÁLISE
-                        </span>
-
-                        <!-- Badge Verde para RESOLVIDO -->
-                        <span th:if="${s.status == 'RESOLVIDO'}" class="badge rounded-pill bg-success text-white px-3 py-2 fw-bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
-                            ✓ RESOLVIDO
-                        </span>
-                    </td>
-                    <!-- Formata a data e hora para o padrão brasileiro: dia/mês/ano hora:minuto -->
-                    <td th:text="${s.dataHora != null ? #temporals.format(s.dataHora, 'dd/MM/yyyy HH:mm') : 'N/A'}"></td>
-
-                    <td>
-                        <a th:href="@{/admin/solicitacoes/editar/{id}(id=${s.id})}" class="btn btn-warning btn-sm fw-bold">
-                            Editar
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </main>
-    </div>
+            </td>
+            <td>
+                <!-- Botão com label textual claro para tecnologias assistivas -->
+                <a th:href="@{/admin/solicitacoes/editar/{id}(id=${solicitacao.id})}"
+                   th:aria-label="'Editar solicitação número ' + ${solicitacao.id}">
+                    Editar
+                </a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(solicitacoes)}">
+            <td colspan="5" role="status" aria-live="polite">Nenhuma solicitação cadastrada no momento.</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
+
 </body>
 </html>

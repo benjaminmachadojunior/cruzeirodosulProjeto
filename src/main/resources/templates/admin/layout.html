@@ -1,24 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head(title)">
+<html xmlns:th="http://thymeleaf.org" lang="pt-BR">
+<head>
     <meta charset="UTF-8">
-    <title th:text="${title}">Painel</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ? ${title} + ' - Painel Associação' : 'Painel Administrativo'"></title>
+    <!-- Estilo básico focado em acessibilidade visual -->
+    <style>
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.2s;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+        nav a:focus, button:focus, input:focus, select:focus, textarea:focus {
+            outline: 3px solid #0056b3;
+            outline-offset: 2px;
+        }
+    </style>
 </head>
 <body>
-    <div th:fragment="sidebar(currentPage)" class="col-md-3 col-lg-2 bg-dark min-vh-100 p-3 text-white">
-        <h3>SysAdmin</h3><hr>
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li><a th:href="@{/admin/dashboard}" class="nav-link text-white">Dashboard</a></li>
-            <li><a th:href="@{/admin/users}" class="nav-link text-white">Moradores</a></li>
-            <li><a th:href="@{/admin/system-users}" class="nav-link text-white">Operadores (Login)</a></li>
-            <li><a th:href="@{/admin/solicitacoes}" class="nav-link text-white">Solicitações</a></li>
+
+<!-- Link de salto para usuários de teclado pularem o menu direto para o conteúdo -->
+<a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+<header role="banner">
+    <h1>Associação de Moradores - Área Administrativa</h1>
+
+    <!-- Navegação Principal com atributos ARIA -->
+    <nav role="navigation" aria-label="Menu Principal">
+        <ul>
+            <li><a th:href="@{/admin/dashboard}">Início</a></li>
+            <li><a th:href="@{/admin/solicitacoes}">Solicitações</a></li>
+            <li><a th:href="@{/admin/usuarios}">Moradores</a></li>
+            <li>
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" aria-label="Encerrar sessão no sistema">Sair</button>
+                </form>
+            </li>
         </ul>
-        <hr><a th:href="@{/logout}" class="btn btn-danger w-100">Sair</a>
+    </nav>
+</header>
+
+<!-- Conteúdo Dinâmico injetado pelas páginas filhas -->
+<main id="conteudo-principal" role="main" tabindex="-1">
+    <div th:replace="${content}">
+        <!-- Conteúdo específico de cada tela aparecerá aqui -->
     </div>
-    <div th:fragment="scripts">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </div>
+</main>
+
+<footer role="contentinfo">
+    <p>&copy; 2026 Associação de Moradores. Todos os direitos reservados para a acessibilidade digital.</p>
+</footer>
+
 </body>
 </html>
