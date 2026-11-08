@@ -1,56 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" lang="pt-BR">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Gerenciar Solicitações</title>
+    <title>Solicitações</title>
 </head>
 <body>
-
-<!-- Renderizado dentro do layout.html -->
 <div th:fragment="content">
-    <h2>Gerenciamento de Solicitações</h2>
-
-    <p>Abaixo estão listados os chamados abertos pelos moradores para manutenção e melhorias do bairro.</p>
-
-    <!-- Tabela Semântica Acessível -->
-    <table border="1" style="width: 100%; border-collapse: collapse;">
-        <caption>Lista detalhada de solicitações dos moradores do condomínio</caption>
+    <h2>Lista de Solicitações</h2>
+    <table border="1">
         <thead>
         <tr>
-            <th scope="col">Código</th>
-            <th scope="col">Morador</th>
-            <th scope="col">Descrição do Pedido</th>
-            <th scope="col">Status Atual</th>
-            <th scope="col">Ações disponíveis</th>
+            <th>ID</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Ações</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Loop do Thymeleaf iterando sobre a lista vinda do Controller -->
-        <tr th:each="solicitacao : ${solicitacoes}">
-            <td th:text="${solicitacao.id}">1</td>
-            <td th:text="${solicitacao.morador.nome}">Benjamin Junior</td>
-            <td th:text="${solicitacao.descricao}">Manutenção na iluminação da via principal.</td>
+        <tr th:each="s : ${solicitacoes}">
+            <td th:text="${s.id}">1</td>
+            <td th:text="${s.descricao}">Descrição</td>
+            <td th:text="${s.status}">PENDENTE</td>
             <td>
-                <!-- Uso de badge contextualizado textualmente e não apenas por cor -->
-                <span th:text="${solicitacao.status}"
-                      th:classappend="${solicitacao.status == 'PENDENTE' ? 'status-alerta' : 'status-ok'}">
-                            PENDENTE
-                        </span>
+                <a th:href="@{/admin/solicitacoes/editar/{id}(id=${s.id})}">Editar</a>
             </td>
-            <td>
-                <!-- Botão com label textual claro para tecnologias assistivas -->
-                <a th:href="@{/admin/solicitacoes/editar/{id}(id=${solicitacao.id})}"
-                   th:aria-label="'Editar solicitação número ' + ${solicitacao.id}">
-                    Editar
-                </a>
-            </td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(solicitacoes)}">
-            <td colspan="5" role="status" aria-live="polite">Nenhuma solicitação cadastrada no momento.</td>
         </tr>
         </tbody>
     </table>
 </div>
-
 </body>
 </html>

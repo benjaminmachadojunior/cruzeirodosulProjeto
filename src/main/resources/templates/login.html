@@ -1,45 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" lang="pt-BR">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Associação de Moradores</title>
+    <title>Login</title>
 </head>
 <body>
-
-<main role="main">
-    <section aria-labelledby="login-title">
-        <h1 id="login-title">Acessar o Sistema</h1>
-
-        <!-- Alertas de erro de autenticação acessíveis via aria-live -->
-        <div th:if="${param.error}" role="alert" aria-live="assertive" style="color: #d32f2f;">
-            <p>Usuário ou senha incorretos. Por favor, tente novamente.</p>
+<div>
+    <h2>Login</h2>
+    <div th:if="${param.error}" style="color: red;">
+        Usuário ou senha inválidos.
+    </div>
+    <div th:if="${param.logout}" style="color: green;">
+        Você foi desconectado.
+    </div>
+    <form th:action="@{/login}" method="post">
+        <div>
+            <input type="text" name="username" placeholder="Usuário" required />
         </div>
-
-        <div th:if="${param.logout}" role="status" aria-live="polite" style="color: #388e3c;">
-            <p>Você saiu do sistema com sucesso.</p>
+        <div>
+            <input type="password" name="password" placeholder="Senha" required />
         </div>
-
-        <form th:action="@{/login}" method="post">
-            <div>
-                <!-- Associação estrita usando 'for' e 'id' -->
-                <label id="label-username" for="username">Nome de Usuário ou E-mail:</label>
-                <input type="text" id="username" name="username" required
-                       aria-required="true" autocomplete="username">
-            </div>
-
-            <div>
-                <label id="label-password" for="password">Senha:</label>
-                <input type="password" id="password" name="password" required
-                       aria-required="true" autocomplete="current-password">
-            </div>
-
-            <div>
-                <button type="submit" aria-label="Entrar no painel do sistema">Entrar</button>
-            </div>
-        </form>
-    </section>
-</main>
-
+        <div>
+            <button type="submit">Entrar</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>
