@@ -1,55 +1,85 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Solicitação</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/layout :: head('Editar Solicitação')}"></head>
 <body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Barra lateral padrão do sistema -->
+        <div th:replace="~{admin/layout :: sidebar('solicitacoes')}"></div>
 
-<div th:fragment="content">
-    <h2>Atualizar Solicitação</h2>
+        <!-- Conteúdo Principal -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <h1 class="mb-4">Editar Solicitação</h1>
 
-    <!-- Formulário mapeado para o objeto Solicitacao no Model do Spring -->
-    <form th:action="@{/admin/solicitacoes/salvar}" th:object="${solicitacao}" method="post">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form th:action="@{/admin/solicitacoes/editar/{id}(id=${solicitacao.id})}" th:object="${solicitacao}" method="post">
 
-        <!-- Campo oculto para controle do ID -->
-        <input type="hidden" th:field="*{id}" />
+                        <!-- ID Oculto para garantir a atualização correta -->
+                        <input type="hidden" th:field="*{id}" />
 
-        <div>
-            <label for="campo-morador">Nome do Solicitante:</label>
-            <!-- Campo desabilitado mantendo a leitura clara -->
-            <input type="text" id="campo-morador" th:value="*{morador.nome}" readonly aria-readonly="true">
-        </div>
+                        <!-- Morador (Apenas Leitura) -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Morador</label>
+                            <input type="text" th:value="${solicitacao.morador != null ? solicitacao.morador.nome : 'Não informado'}" class="form-control bg-light" readonly disabled/>
+                        </div>
 
-        <div>
-            <label for="campo-descricao">Detalhamento do Problema:</label>
-            <textarea id="campo-descricao" th:field="*{descricao}" rows="4" required aria-required="true"
-                      th:aria-invalid="${#fields.hasErrors('descricao')} ? 'true' : 'false'"
-                      aria-describedby="erro-descricao"></textarea>
+                        <!-- Endereço -->
+                        <div class="mb-3">
+                            <label for="endereco" class="form-label fw-bold">Endereço</label>
+                            <input type="text" th:field="*{endereco}" id="endereco" class="form-control" required/>
+                        </div>
 
-            <!-- Feedback instantâneo de erro de validação -->
-            <span id="erro-descricao" role="alert" aria-live="assertive" style="color: #d32f2f;"
-                  th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">
-                    A descrição precisa ter o tamanho correto.
-                </span>
-        </div>
+                        <!-- Criticidade -->
+                        <div class="mb-3">
+                            <label for="criticidade" class="form-label fw-bold">Criticidade (0 a 99)</label>
+                            <input type="number" th:field="*{criticidade}" id="criticidade" min="0" max="99" class="form-control" required/>
+                        </div>
 
-        <div>
-            <label for="campo-status">Situação/Status:</label>
-            <select id="campo-status" th:field="*{status}" required aria-required="true">
-                <option value="PENDENTE">Análise Pendente</option>
-                <option value="EM_ANDAMENTO">Em Atendimento</option>
-                <option value="CONCLUIDO">Resolvido/Concluído</option>
-                <option value="REJEITADO">Não Aprovado</option>
-            </select>
-        </div>
+                        <!-- Campo de Seleção Customizado para Status (Estilo Botão de Rádio) -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" style="color: #212529 !important;">Status da Solicitação</label>
+                            <div class="card bg-white border p-2">
+                                <!-- Opção PENDENTE -->
+                                <div class="form-check p-2 border-bottom border-light d-flex align-items-center">
+                                    <input class="form-check-input ms-1 me-3" type="radio" th:field="*{status}" id="status_pendente" value="PENDENTE" required />
+                                    <label class="form-check-label text-dark fw-normal" for="status_pendente" style="color: #212529 !important; cursor: pointer;">
+                                        Pendente
+                                    </label>
+                                </div>
+                                <!-- Opção EM ANÁLISE -->
+                                <div class="form-check p-2 border-bottom border-light d-flex align-items-center">
+                                    <input class="form-check-input ms-1 me-3" type="radio" th:field="*{status}" id="status_analise" value="EM_ANÁLISE" />
+                                    <label class="form-check-label text-dark fw-normal" for="status_analise" style="color: #212529 !important; cursor: pointer;">
+                                        Em Análise
+                                    </label>
+                                </div>
+                                <!-- Opção RESOLVIDO -->
+                                <div class="form-check p-2 d-flex align-items-center">
+                                    <input class="form-check-input ms-1 me-3" type="radio" th:field="*{status}" id="status_resolvido" value="RESOLVIDO" />
+                                    <label class="form-check-label text-dark fw-normal" for="status_resolvido" style="color: #212529 !important; cursor: pointer;">
+                                        Resolvido
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
 
-        <div style="margin-top: 15px;">
-            <button type="submit" aria-label="Salvar alterações do chamado">Confirmar Atualização</button>
-            <a th:href="@{/admin/solicitacoes}" aria-label="Cancelar edição e voltar para a listagem">Voltar</a>
-        </div>
-    </form>
+                        <!-- Campo de Descrição com trava física de digitação -->
+                        <div class="mb-4">
+                            <label for="descricao" class="form-label fw-bold">Descrição</label>
+                            <textarea th:field="*{descricao}" id="descricao" maxlength="1000" class="form-control" rows="4" required></textarea>
+                        </div>
+
+                        <!-- Botões de Ação Alinhados -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning px-4">Salvar Alterações</button>
+                            <a th:href="@{/admin/solicitacoes}" class="btn btn-secondary px-4">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
 </div>
-
 </body>
 </html>
