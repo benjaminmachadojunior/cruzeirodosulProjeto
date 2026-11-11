@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://apache.org" xmlns:xsi="http://w3.org"
-         xsi:schemaLocation="http://apache.org https://apache.org">
+<project xmlns="http://apache.org"
+         xmlns:xsi="http://w3.org"
+         xsi:schemaLocation="http://apache.org http://apache.org">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -67,6 +68,14 @@
     </dependencies>
 
     <build>
+        <!-- Evita que o Maven tente processar caracteres especiais do application.properties -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- Plugin padrão do ecossistema Spring Boot -->
             <plugin>
